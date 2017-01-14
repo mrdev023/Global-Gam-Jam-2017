@@ -38,14 +38,14 @@ public class Shaders {
 			System.err.println(glGetShaderInfoLog(vert, 2048));
 			System.exit(1);
 		}else{
-			System.out.println("Vertex compiled !");
+			System.out.println(vertexFile + " compiled !");
 		}
 		glCompileShader(frag);
 		if (glGetShaderi(frag, GL_COMPILE_STATUS) == GL_FALSE) {
 			System.err.println(glGetShaderInfoLog(frag, 2048));
 			System.exit(1);
 		}else{
-			System.out.println("Fragment compiled !");
+			System.out.println(fragmentFile + " compiled !");
 		}
 		glAttachShader(program, vert);
 		glAttachShader(program, frag);

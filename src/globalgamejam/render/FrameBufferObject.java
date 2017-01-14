@@ -2,11 +2,8 @@ package globalgamejam.render;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL32.*;
-
 import globalgamejam.Main;
 import globalgamejam.math.Matrix4f;
-import globalgamejam.math.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
