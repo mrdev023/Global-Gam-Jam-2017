@@ -41,9 +41,6 @@ public class FrameBufferObject {
 
         //Definir le render Texture
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, renderedTexture, 0);
-        IntBuffer drawBuffs = BufferUtils.createIntBuffer(1);
-        drawBuffs.put(0, GL_COLOR_ATTACHMENT0);
-        GL20.glDrawBuffers(drawBuffs);
         if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             throw new IllegalStateException("FBO not loaded !");
         fboTexID = renderedTexture;
@@ -75,6 +72,9 @@ public class FrameBufferObject {
 
     public void startRenderToFBO(){
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        IntBuffer drawBuffs = BufferUtils.createIntBuffer(1);
+        drawBuffs.put(0, GL_COLOR_ATTACHMENT0);
+        GL20.glDrawBuffers(drawBuffs);
         glViewport(0,0,Main.WIDTH,Main.HEIGHT);
     }
 

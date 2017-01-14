@@ -4,6 +4,7 @@ package globalgamejam;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import org.lwjgl.glfw.*;
@@ -48,6 +49,7 @@ public class Main {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GL11.GL_FALSE);
+        glfwWindowHint(GLFW_SAMPLES, 4);//Activation du MSAA x4
 //        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 //        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 //        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -69,6 +71,7 @@ public class Main {
 
         //initialisation
         //------------------------------------------------------------------------------------
+        glEnable(GL_MULTISAMPLE);//Activation du MSAA
         Input.init();
         game = new MainGame();
 
@@ -103,9 +106,16 @@ public class Main {
             }
         }
 
+        game.destroy();
         Audio.destroy();
         glfwDestroyWindow(windowID);
         glfwTerminate();
+    }
+
+    public static void changeGame(Game g){
+        game.destroy();
+        game = g;
+        g.init();
     }
 
 }
