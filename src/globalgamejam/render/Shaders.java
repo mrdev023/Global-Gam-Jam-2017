@@ -12,6 +12,16 @@ public class Shaders {
 	
 	public int program;
 
+	public static Shaders MAIN_SHADERS;
+
+	static{
+		try{
+			MAIN_SHADERS = new Shaders("res/shaders/main.vert","res/shaders/main.frag");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
 	public Shaders(String vertexFile,String fragmentFile) throws Exception{
 		String fragmentShader = IO.loadFile(fragmentFile);
 		String vertexShader = IO.loadFile(vertexFile);
