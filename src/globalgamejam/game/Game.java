@@ -10,6 +10,7 @@ import globalgamejam.render.*;
 public abstract class Game {
 	
 	public Game(){
+		Camera.init();
 		init();
 	}
 	

@@ -14,23 +14,19 @@ import globalgamejam.math.*;
 public class Camera {
 
 	public static Matrix4f matrix = new Matrix4f();
-	public static final float SPEED = 1.0f;//Speed de base
-
-
-
-	public static float rot = 0.0f;//rotation de la camera
+	public static float rotation = 0.0f;//rotation de la camera
 	public static Vector2f pos = new Vector2f();
 
-	public static void update(){
-		float speed = SPEED * Main.delta;//speed reel par frame en fonction des fps
-		//class Input pour tous ce qui est entrer et sortis
-
+	public static void init(){
+		matrix = new Matrix4f();
+		rotation = 0.0f;
+		pos = new Vector2f();
 	}
 
 	public static void transform(){
 		matrix.loadIdentity();
-		matrix.rotate(new Quaternion(new Vector3f(0,0,1),rot));
-		matrix.tranlate(-pos.x, -pos.y, 0);
+		matrix.translate(-pos.x,-pos.y,0);
+		matrix.rotate(new Quaternion(new Vector3f(0,0,1),rotation));
 	}
 
 }

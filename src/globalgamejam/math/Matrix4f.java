@@ -82,7 +82,7 @@ public class Matrix4f {
 		return mat;
 	}
 	
-	public Matrix4f tranlate(float x,float y,float z){
+	public Matrix4f translate(float x,float y,float z){
 		Matrix4f mat = new Matrix4f(new float[][]{
 			{1,0,0,x},
 			{0,1,0,y},

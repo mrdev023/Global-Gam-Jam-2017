@@ -14,7 +14,6 @@ void main() {
     // Pass some variables to the fragment shader
     fragTexCoord = vertTexCoord;
     fragVert = vert;
-    fragColor = vertColor;
 
     // Apply all matrix transformations to vert
     gl_Position = projection * camera * transform * vec4(vert, 1);

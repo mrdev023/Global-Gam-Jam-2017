@@ -1,7 +1,11 @@
-package globalgamejam.render;
+package globalgamejam.tiles;
 
 import globalgamejam.math.Color4f;
 import globalgamejam.math.Matrix4f;
+import globalgamejam.render.Camera;
+import globalgamejam.render.DisplayManager;
+import globalgamejam.render.Shaders;
+import globalgamejam.render.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
@@ -19,19 +23,15 @@ public abstract class Tile {
     private int size;
 
     public Tile(){
-        this.texture = new Texture(0,0,0);
+        this.texture = Texture.loadTexture("res/textures/default.png");
         this.transform = new Matrix4f();
         this.color = Color4f.WHITE;
         this.vbo = GL15.glGenBuffers();
-        load();
-    }
-
-    private void load(){
         float[] a = new float[]{
-                -1.0f,-1.0f,        0.0f,0.0f,
-                1.0f,-1.0f,         1.0f,0.0f,
-                1.0f,1.0f,          1.0f,1.0f,
-                1.0f,-1.0f,         0.0f,1.0f,
+                -.5f,-.5f,        0.0f,0.0f,
+                .5f,-.5f,         1.0f,0.0f,
+                .5f,.5f,          1.0f,1.0f,
+                -.5f,.5f,         0.0f,1.0f
         };
         FloatBuffer buffer = BufferUtils.createFloatBuffer(a.length);
         buffer.put(a).flip();
@@ -48,6 +48,7 @@ public abstract class Tile {
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
+
 
     public void render(){
         Shaders.MAIN_SHADERS.bind();

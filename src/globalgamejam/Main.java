@@ -44,14 +44,14 @@ public class Main {
         };
 //		glfwSetErrorCallback(errorCallback);
 
-        if(glfwInit())throw new Exception("GLFW not init");
+        if(!glfwInit())throw new Exception("GLFW not init");
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GL11.GL_FALSE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+//        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+//        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+//        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+//        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         windowID = glfwCreateWindow(WIDTH,HEIGHT,TITLE,NULL,NULL);
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(windowID,(vidmode.width()-WIDTH)/2,(vidmode.height()-HEIGHT)/2);
@@ -75,7 +75,7 @@ public class Main {
         Camera.transform();
         //------------------------------------------------------------------------------------
 
-        while(glfwWindowShouldClose(windowID)){
+        while(!glfwWindowShouldClose(windowID)){
 
             if(System.currentTimeMillis() - previousTicks >= 1000/60){//Update TICKS
                 glfwPollEvents();
