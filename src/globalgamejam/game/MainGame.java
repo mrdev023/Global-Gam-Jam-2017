@@ -3,7 +3,6 @@ package globalgamejam.game;
 import globalgamejam.render.*;
 import globalgamejam.tiles.TestTile;
 import globalgamejam.tiles.Tile;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -13,9 +12,11 @@ import java.util.ArrayList;
 public class MainGame extends Game{
 
     private ArrayList<Tile> tiles;
+    private FrameBufferObject fbo;
 
 	@Override
 	public void init() {
+		fbo = new FrameBufferObject();
 		tiles = new ArrayList<Tile>();
 		TestTile t = new TestTile();
 		t.getTransform().translate(100,100,0);
@@ -31,7 +32,11 @@ public class MainGame extends Game{
 
 	@Override
 	public void render2D() {
+		fbo.startRenderToFBO();
 		for(Tile t : tiles)t.render();
+		fbo.stopRenderToFBO();
+
+		fbo.renderFBO();
 	}
 
 
@@ -42,6 +47,7 @@ public class MainGame extends Game{
 
 	@Override
 	public void destroy() {
+		fbo.destroy();
 		tiles.clear();
 	}
 

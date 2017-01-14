@@ -12,11 +12,12 @@ public class Shaders {
 	
 	public int program;
 
-	public static Shaders MAIN_SHADERS;
+	public static Shaders MAIN_SHADERS,MAIN_FBO;
 
 	static{
 		try{
 			MAIN_SHADERS = new Shaders("res/shaders/main.vert","res/shaders/main.frag");
+			MAIN_FBO = new Shaders("res/shaders/fbo.vert","res/shaders/fbo.frag");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
