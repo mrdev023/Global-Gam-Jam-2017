@@ -25,6 +25,9 @@ public class Vector3f {
 	public Vector3f(Vector2f vec,float z){
 		this(vec.x,vec.y,z);
 	}
+	public Vector3f(Vector2f vec){
+		this(vec.x,vec.y,0);
+	}
 	
 	public Vector3f(Vector3f vec){
 		this(vec.x,vec.y,vec.z);

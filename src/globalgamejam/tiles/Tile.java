@@ -1,7 +1,6 @@
 package globalgamejam.tiles;
 
-import globalgamejam.math.Color4f;
-import globalgamejam.math.Matrix4f;
+import globalgamejam.math.*;
 import globalgamejam.render.Camera;
 import globalgamejam.render.DisplayManager;
 import globalgamejam.render.Shaders;
@@ -19,12 +18,18 @@ public abstract class Tile {
     private int vbo;
     private Texture texture;
     private Color4f color;
+    private Vector2f position;
+    private Vector2f scale;
+    private float rotation;
     private Matrix4f transform;
     private int size;
 
     public Tile(){
         this.texture = Texture.loadTexture("res/textures/default.png");
         this.transform = new Matrix4f();
+        this.position = new Vector2f();
+        this.scale = new Vector2f();
+        this.rotation = 0;
         this.color = Color4f.WHITE;
         this.vbo = GL15.glGenBuffers();
         float[] a = new float[]{
@@ -71,6 +76,9 @@ public abstract class Tile {
         GL15.glDeleteBuffers(vbo);
         texture.destroy();
         transform = null;
+        this.position = null;
+        this.rotation = 0;
+        this.scale = null;
     }
 
     public Texture getTexture() {
@@ -95,5 +103,36 @@ public abstract class Tile {
 
     public Matrix4f getTransform() {
         return transform;
+    }
+
+    public Vector2f getPosition() {
+        return position;
+    }
+
+    public Vector2f getScale() {
+        return scale;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setPosition(Vector2f position) {
+        this.position = position;
+    }
+
+    public void setScale(Vector2f scale) {
+        this.scale = scale;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
+
+    public void applyTransform(){
+        this.transform.loadIdentity();
+        this.transform.translate(this.position.x,this.position.y,0);
+        this.transform.rotate(new Quaternion(new Vector3f(0,0,1),this.rotation));
+        this.transform.scale(this.scale.x,this.scale.y,1);
     }
 }
