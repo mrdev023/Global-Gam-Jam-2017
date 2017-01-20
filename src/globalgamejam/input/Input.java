@@ -123,7 +123,7 @@ public class Input{
 		return state.get(button + MOUSE_OFFSET) == PRESSED || state.get(button + MOUSE_OFFSET) == REPEATED;
 	}
 
-	public static int isButtonState(int button){
+	public static int getButtonState(int button){
 		return state.get(button + MOUSE_OFFSET);
 	}
 
@@ -139,7 +139,7 @@ public class Input{
 		return state.get(key) == PRESSED || state.get(key) == REPEATED;
 	}
 
-	public static int isKeyState(int key){
+	public static int getKeyState(int key){
 		return state.get(key);
 	}
 
