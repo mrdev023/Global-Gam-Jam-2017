@@ -1,6 +1,6 @@
 package globalgamejam.game;
 
-import globalgamejam.gui.interfaces.MainInterfaces;
+import globalgamejam.interfaces.MainInterfaces;
 
 import globalgamejam.world.MainWorld;
 

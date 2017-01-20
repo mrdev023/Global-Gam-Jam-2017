@@ -1,4 +1,4 @@
-package globalgamejam.gui.interfaces;
+package globalgamejam.interfaces;
 
 import globalgamejam.Main;
 import globalgamejam.game.MainGame;
