@@ -44,13 +44,6 @@ public abstract class Tile {
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-
-        GL20.glEnableVertexAttribArray(Shaders.MAIN_SHADERS.getAttribLocation("vert"));
-        GL20.glVertexAttribPointer(Shaders.MAIN_SHADERS.getAttribLocation("vert"), 2, GL11.GL_FLOAT, false, (2+2)*4, 0);
-
-        GL20.glEnableVertexAttribArray(Shaders.MAIN_SHADERS.getAttribLocation("vertTexCoord"));
-        GL20.glVertexAttribPointer(Shaders.MAIN_SHADERS.getAttribLocation("vertTexCoord"), 2, GL11.GL_FLOAT, true, (2+2)*4, 2*4);
-
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
@@ -62,10 +55,17 @@ public abstract class Tile {
         Shaders.MAIN_SHADERS.uniform("projection", DisplayManager.projection);
         Shaders.MAIN_SHADERS.uniform("color", this.color);
 
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+//        GL13.glActiveTexture(GL13.GL_TEXTURE0);
         texture.bind();
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+
+        GL20.glEnableVertexAttribArray(Shaders.MAIN_SHADERS.getAttribLocation("vert"));
+        GL20.glVertexAttribPointer(Shaders.MAIN_SHADERS.getAttribLocation("vert"), 2, GL11.GL_FLOAT, false, (2+2)*4, 0);
+
+        GL20.glEnableVertexAttribArray(Shaders.MAIN_SHADERS.getAttribLocation("vertTexCoord"));
+        GL20.glVertexAttribPointer(Shaders.MAIN_SHADERS.getAttribLocation("vertTexCoord"), 2, GL11.GL_FLOAT, true, (2+2)*4, 2*4);
+
         GL11.glDrawArrays(GL11.GL_QUADS, 0, size);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         texture.unbind();

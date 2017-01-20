@@ -7,9 +7,16 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
+import globalgamejam.math.Color4f;
+import globalgamejam.math.Matrix4f;
+import globalgamejam.render.Camera;
+import globalgamejam.render.DisplayManager;
+import globalgamejam.render.Shaders;
+import globalgamejam.render.Texture;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.*;
 
 /**
  * usefull to print 2D text in openGL LWJGL application
@@ -17,14 +24,13 @@ import org.lwjgl.opengl.GL12;
  * @version 1.0
  */
 public class GUILabel extends GUI {
-
-	private static final int BYTES_PER_PIXEL = 4;//3 for RGB, 4 for RGBA
 	
-	private Image label;
+	private Texture texture;
 	private String text;
 	private Color color;
 	private int size;
 	private String font;
+	private int vbo,numberOfVertices;
 	
 	/**
 	 * Full constructor of a Label
@@ -37,67 +43,51 @@ public class GUILabel extends GUI {
 	 */
 	public GUILabel(String text, int xC, int yC, Color color, String font, int size){
 		super(xC,yC);
-		this.text = text;
-		this.color = color;
-		this.size = size;
 		this.font = font;
-		
-		Font f_font = new Font(font, Font.PLAIN, size);
-		
-		// to get the width of the text
-		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		FontMetrics fm = img.getGraphics().getFontMetrics(f_font);
-		
-		super.width = fm.stringWidth(this.text);
-		super.height = fm.getHeight();
-		
-		final BufferedImage image = new BufferedImage(super.width, this.height, BufferedImage.TYPE_INT_ARGB);
-//		makeTransparent(image);
-		
-		Graphics g = image.getGraphics();
-		g.setFont(f_font);
-		g.setColor(this.color);
-		g.drawString(this.text, 0, size);
-		g.dispose();
-		
-		int[] pixels = new int[image.getWidth() * image.getHeight()];
-		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-		
-		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL); //4 for RGBA, 3 for RGB
-		
-		for(int y = 0; y < image.getHeight(); y++){
-			for(int x = 0; x < image.getWidth(); x++){
-				int pixel = pixels[y * image.getWidth() + x];
-				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-				buffer.put((byte) (pixel & 0xFF));               // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
-			}
-		}
-		
-		buffer.flip(); //FOR THE LOVE OF GOD DO NOT FORGET THIS
-		
-		// You now have a ByteBuffer filled with the color data of each pixel.
-		// Now just create a texture ID and bind it. Then you can load it using 
-		// whatever OpenGL method you want, for example:
-		
-		int textureID = glGenTextures(); //Generate texture ID
-		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-		
-		//Setup wrap mode
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		
-		//Setup texture scaling filtering
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		//Send texel data to OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		this.label = new Image(xC, yC, image.getWidth(), image.getHeight(), textureID);
+		this.color = color;
+		this.text = text;
+		this.size = size;
+		if(this.texture != null)this.texture.destroy();
+		this.texture = Texture.loadFont(text,color,font,size);
+		super.width = this.texture.width;
+		super.height = this.texture.height;
+		this.vbo = GL15.glGenBuffers();
+		float[] a = new float[]{
+				0,0,        0.0f,0.0f,
+				this.texture.width,0,         1.0f,0.0f,
+				this.texture.width,this.texture.height,          1.0f,1.0f,
+				0,this.texture.height,         0.0f,1.0f
+		};
+		FloatBuffer buff = BufferUtils.createFloatBuffer(a.length);
+		buff.put(a).flip();
+		this.numberOfVertices = a.length/(2+2);
+
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbo);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buff, GL15.GL_STATIC_DRAW);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+	}
+
+	public void render(){
+		Shaders.MAIN_SHADERS.bind();
+		Shaders.MAIN_SHADERS.uniform("camera", Camera.matrix);
+		Matrix4f transform = new Matrix4f();
+		transform.translate(super.x,super.y,0);
+		Shaders.MAIN_SHADERS.uniform("transform", transform);
+		Shaders.MAIN_SHADERS.uniform("projection", DisplayManager.projection);
+		Shaders.MAIN_SHADERS.uniform("color", Color4f.WHITE);
+
+		texture.bind();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbo);
+		GL20.glEnableVertexAttribArray(Shaders.MAIN_SHADERS.getAttribLocation("vert"));
+		GL20.glVertexAttribPointer(Shaders.MAIN_SHADERS.getAttribLocation("vert"), 2, GL11.GL_FLOAT, false, (2+2)*4, 0);
+
+		GL20.glEnableVertexAttribArray(Shaders.MAIN_SHADERS.getAttribLocation("vertTexCoord"));
+		GL20.glVertexAttribPointer(Shaders.MAIN_SHADERS.getAttribLocation("vertTexCoord"), 2, GL11.GL_FLOAT, true, (2+2)*4, 2*4);
+
+		GL11.glDrawArrays(GL11.GL_QUADS, 0, numberOfVertices);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		texture.unbind();
+		Shaders.MAIN_SHADERS.unbind();
 	}
 	
 	/**
@@ -130,63 +120,8 @@ public class GUILabel extends GUI {
 	 */
 	public void setColor(Color color) {
 		this.color = color;
-		
-		Font f_font = new Font(font, Font.PLAIN, size);
-		
-		// to get the width of the text
-		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		FontMetrics fm = img.getGraphics().getFontMetrics(f_font);
-
-		super.width = fm.stringWidth(this.text);
-		super.height = fm.getHeight();
-		
-		final BufferedImage image = new BufferedImage(super.width, super.height, BufferedImage.TYPE_INT_ARGB);
-//		makeTransparent(image);
-		
-		Graphics g = image.getGraphics();
-		g.setFont(f_font);
-		g.setColor(this.color);
-		g.drawString(this.text, 0, size);
-		g.dispose();
-		
-		int[] pixels = new int[image.getWidth() * image.getHeight()];
-		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-		
-		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL); //4 for RGBA, 3 for RGB
-		
-		for(int y = 0; y < image.getHeight(); y++){
-			for(int x = 0; x < image.getWidth(); x++){
-				int pixel = pixels[y * image.getWidth() + x];
-				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-				buffer.put((byte) (pixel & 0xFF));               // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
-			}
-		}
-		
-		buffer.flip(); //FOR THE LOVE OF GOD DO NOT FORGET THIS
-		
-		// You now have a ByteBuffer filled with the color data of each pixel.
-		// Now just create a texture ID and bind it. Then you can load it using 
-		// whatever OpenGL method you want, for example:
-		
-		int textureID = glGenTextures(); //Generate texture ID
-		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-		
-		//Setup wrap mode
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		
-		//Setup texture scaling filtering
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		//Send texel data to OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		this.label = new Image(this.x, this.y, image.getWidth(), image.getHeight(), textureID);
+		if(this.texture != null)this.texture.destroy();
+		this.texture = Texture.loadFont(text,color,font,size);
 	}
 	
 	/**
@@ -203,64 +138,11 @@ public class GUILabel extends GUI {
 	 */
 	public void setText(String text) {
 		this.text = text;
-		
-		Font f_font = new Font(font, Font.PLAIN, size);
-		
-		// to get the width of the text
-		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		FontMetrics fm = img.getGraphics().getFontMetrics(f_font);
-
-		super.width = fm.stringWidth(this.text);
-		super.height = fm.getHeight();
-		
-		final BufferedImage image = new BufferedImage(super.width, super.height, BufferedImage.TYPE_INT_ARGB);
-//		makeTransparent(image);
-		
-		Graphics g = image.getGraphics();
-		g.setFont(f_font);
-		g.setColor(this.color);
-		g.drawString(this.text, 0, size);
-		g.dispose();
-		
-		int[] pixels = new int[image.getWidth() * image.getHeight()];
-		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-		
-		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL); //4 for RGBA, 3 for RGB
-		
-		for(int y = 0; y < image.getHeight(); y++){
-			for(int x = 0; x < image.getWidth(); x++){
-				int pixel = pixels[y * image.getWidth() + x];
-				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-				buffer.put((byte) (pixel & 0xFF));               // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
-			}
-		}
-		
-		buffer.flip(); //FOR THE LOVE OF GOD DO NOT FORGET THIS
-		
-		// You now have a ByteBuffer filled with the color data of each pixel.
-		// Now just create a texture ID and bind it. Then you can load it using 
-		// whatever OpenGL method you want, for example:
-		
-		int textureID = glGenTextures(); //Generate texture ID
-		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-		
-		//Setup wrap mode
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		
-		//Setup texture scaling filtering
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		//Send texel data to OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		this.label = new Image(this.x, this.y, image.getWidth(), image.getHeight(), textureID);
+		if(this.texture != null)this.texture.destroy();
+		this.texture = Texture.loadFont(text,color,font,size);
 	}
+
+
 	
 	/**
 	 * Return the x coordonnate of the Label (upper left corner)
@@ -276,7 +158,6 @@ public class GUILabel extends GUI {
 	 */
 	public void setX(int x) {
 		super.setX(x);
-		label.setX(x);
 	}
 	
 	/**
@@ -293,7 +174,6 @@ public class GUILabel extends GUI {
 	 */
 	public void setY(int y) {
 		super.setY(y);
-		label.setY(y);
 	}
 	
 	/**
@@ -304,14 +184,6 @@ public class GUILabel extends GUI {
 	public void setPosition(int x, int y){
 		this.setX(x);
 		this.setY(y);
-	}
-	
-	/**
-	 * Return the Image of the Label
-	 * @return label (Image) : the Image of the Label
-	 */
-	public Image getLabel(){
-		return this.label;
 	}
 	
 	/**
@@ -328,6 +200,11 @@ public class GUILabel extends GUI {
 	 */
 	public int getHeight() {
 		return super.height;
+	}
+
+	public void destroy(){
+		GL15.glDeleteBuffers(vbo);
+		texture.destroy();
 	}
 	
 	/**

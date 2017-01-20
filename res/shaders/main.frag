@@ -6,9 +6,11 @@ uniform vec4 color;
 in vec2 fragTexCoord;
 in vec3 fragVert;
 
+out vec4 finalColor;
+
 //layout(location = 0) out vec4 finalColor;
 // https://learnopengl.com/#!Lighting/Multiple-lights pour le lighing en cas de besoin
 
 void main() {
-    gl_FragData[0] = texture(materialTex, fragTexCoord) * color;
+    finalColor = texture(materialTex, fragTexCoord) * color;
 }

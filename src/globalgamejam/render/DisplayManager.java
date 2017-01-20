@@ -29,7 +29,7 @@ public class DisplayManager {
 	public static void preRenderGUI(){
 		projection.loadIdentity();
 		//Permet de centrer la camera au centre de l'ecran
-		projection.Ortho2D(0, Main.WIDTH, 0, Main.HEIGHT, -1, 1);
+		projection.Ortho2D(0, Main.WIDTH, Main.HEIGHT, 0, -1, 1);
 		glEnable(GL_DEPTH_TEST);
 	    glDepthFunc(GL_LESS);
 	    glEnable(GL_BLEND);

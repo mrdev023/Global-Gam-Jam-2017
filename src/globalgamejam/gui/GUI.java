@@ -20,10 +20,16 @@ public abstract class GUI {
         this.height = 0;
     }
 
+    public void setAction(IActionGUI action){
+        this.action = action;
+    }
+
     public void update(){
         float mouseX = Input.getMousePosition().x;
         float mouseY = Input.getMousePosition().y;
-        if(mouseX >= this.x && mouseX <= this.x && mouseY >= this.y && mouseY <= this.y){
+        float dMouseX = Input.getDMouse().x;
+        float dMouseY = Input.getDMouse().y;
+        if(mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height){
             for(int i = 0;i < Input.NBRE_BUTTON;i++){
                 if(Input.isButton(i)){
                     action.clicked(mouseX,mouseY,i,Input.getButtonState(i));
@@ -32,17 +38,21 @@ public abstract class GUI {
             if(mouseInGUI == 0){
                 mouseInGUI = 1;
                 action.enter(mouseX,mouseY);
-            }else if(mouseInGUI == 1 && mouseInGUI == 2){
+            }else if(mouseInGUI == 1 || mouseInGUI == 2){
                 mouseInGUI = 2;
-                action.move(mouseX,mouseY);
+                action.hover(mouseX,mouseY);
+                if(dMouseX != 0 || dMouseY != 0)action.move(mouseX,mouseY);
             }
         }else{
-            if(mouseInGUI == 1 && mouseInGUI == 2){
+            if(mouseInGUI == 1 || mouseInGUI == 2){
                 mouseInGUI = 0;
                 action.leave(mouseX,mouseY);
             }
         }
     }
+
+    public abstract void render();
+    public abstract void destroy();
 
     public int getX() {
         return x;
