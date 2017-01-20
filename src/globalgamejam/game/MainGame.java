@@ -1,9 +1,13 @@
 package globalgamejam.game;
 
+
 import java.awt.Color;
 import java.util.ArrayList;
 
 import globalgamejam.Main;
+
+import globalgamejam.math.Vector2f;
+
 import globalgamejam.gui.ActionGUI;
 import globalgamejam.gui.GUI;
 import globalgamejam.gui.GUILabel;
@@ -12,12 +16,23 @@ import globalgamejam.tiles.Fond;
 import globalgamejam.tiles.TestTile;
 import globalgamejam.tiles.Tile;
 
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
+
+
 /**
  * Class created by MrDev023 (Florian RICHER) on 14/01/2017
  */
 public class MainGame extends Game{
 
     private ArrayList<Tile> tiles;
+    
+    private Random rand;
+    
+    private Player player1;
+
 	private ArrayList<GUI> guis;
     private GUILabel label;
 
@@ -36,6 +51,12 @@ public class MainGame extends Game{
 		tiles.add(fond);
 		tiles.add(t);
 		
+
+		player1 = new Player(-100, 0);
+		tiles.add(player1.getTile());
+		
+		rand = new Random();
+
 		label = new GUILabel("Test");
 		label.setX(10);
 		label.setY(10);
@@ -57,6 +78,8 @@ public class MainGame extends Game{
 	@Override
 	public void update() {
 	    Camera.transform();
+	  //  player1.setPosition((rand.nextFloat() - 0.5f) * 200f, (rand.nextFloat() - 0.5f) * 150f);
+	  //  player1.applyTransform();
 	    for(GUI g : guis)g.update();
 
 	}
