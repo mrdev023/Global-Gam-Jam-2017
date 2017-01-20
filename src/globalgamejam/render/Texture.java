@@ -22,7 +22,6 @@ public class Texture {
 	int id;
 	
 	public Texture(int width,int height,int id){
-		System.out.println("Texture loaded ! " + width + "x" + height + " id:" + id);
 		this.id = id;
 		this.width = width;
 		this.height = height;
@@ -83,6 +82,7 @@ public class Texture {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
+		System.out.println("Texture loaded ! " + width + "x" + height + " id:" + textureID);
 
 		return new Texture(image.getWidth(),image.getHeight(),textureID);
 	}
