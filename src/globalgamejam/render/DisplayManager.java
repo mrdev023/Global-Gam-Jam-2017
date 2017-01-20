@@ -18,7 +18,8 @@ public class DisplayManager {
 	
 	public static void preRender2D(){
 		projection.loadIdentity();
-		projection.Ortho2D(-Main.WIDTH/2.0f, Main.WIDTH/2.0f, -Main.HEIGHT/2.0f, Main.HEIGHT/2.0f, -1, 1);
+//		projection.Ortho2D(-Main.WIDTH/2.0f, Main.WIDTH/2.0f, -Main.HEIGHT/2.0f, Main.HEIGHT/2.0f, -1, 1);
+		projection.Ortho2D(0, Main.WIDTH, 0, Main.HEIGHT, -1, 1);
 		glEnable(GL_DEPTH_TEST);
 	    glDepthFunc(GL_LESS);
 	    glEnable(GL_BLEND);
