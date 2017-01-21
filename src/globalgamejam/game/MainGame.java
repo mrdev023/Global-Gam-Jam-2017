@@ -2,29 +2,10 @@ package globalgamejam.game;
 
 
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Random;
-
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
-import globalgamejam.Main;
-import globalgamejam.gui.ActionGUI;
-import globalgamejam.gui.GUI;
-import globalgamejam.gui.GUILabel;
-import globalgamejam.render.Camera;
-import globalgamejam.tiles.Fond;
-import globalgamejam.tiles.Objet;
-import globalgamejam.tiles.Tile;
-
+import org.lwjgl.glfw.GLFW;
 
 import globalgamejam.interfaces.MainInterfaces;
-
 import globalgamejam.world.MainWorld;
-
-import java.util.Random;
-
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Class created by MrDev023 (Florian RICHER) on 14/01/2017

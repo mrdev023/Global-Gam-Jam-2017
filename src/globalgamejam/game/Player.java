@@ -3,6 +3,7 @@ package globalgamejam.game;
 import globalgamejam.math.Vector2f;
 import globalgamejam.physics.PhysicalEntity;
 import globalgamejam.render.Texture;
+import globalgamejam.tiles.PlayerTile;
 import globalgamejam.tiles.Tile;
 
 /**
@@ -15,15 +16,23 @@ public class Player extends PhysicalEntity {
 	private final Tile tile;
 	private float angle;
 	
+	private float speed = 3;
+	
 	private final PhysicalEntity brosse;
 	private final float longueurBalai;
 	
 	public Player(float x, float y){
-		super(x, y, 100, 0, 0, 10);
+		super(x, y, 100, 3, 0, 0, 10);
 		this.tile = new PlayerTile("res/textures/perso.png", x, y);
 		
-		this.longueurBalai = 100;
-		this.brosse = new PhysicalEntity(x, y + this.longueurBalai, 20, 0, 0, 0);
+		this.longueurBalai = 80;
+		
+		this.brosse = new PhysicalEntity(x, y + this.longueurBalai, 2f, 3, 0, 0, 0){
+			@Override
+			public float getSpeed(){
+				return getSpeedFactor();
+			}
+		};
 	}
 	
 	public Tile getTile(){
@@ -50,8 +59,8 @@ public class Player extends PhysicalEntity {
 		
 		float angleRad = (float)(this.angle * (Math.PI / 180));
 		
-		float xBrosse = this.x + this.longueurBalai * (float)Math.cos(angleRad);
-		float yBrosse = this.y + this.longueurBalai * (float)Math.sin(angleRad);
+		float xBrosse = this.x + this.longueurBalai * -(float)Math.sin(angleRad);
+		float yBrosse = this.y + this.longueurBalai * (float)Math.cos(angleRad);
 		
 		this.brosse.setPosition(xBrosse, yBrosse);
 	}
@@ -60,23 +69,19 @@ public class Player extends PhysicalEntity {
 		return this.brosse.collideWithSquareHitBox(entity);
 	}
 	
+	/**
+	 * @return the velocity
+	 */
+	public float getSpeed() {
+		return this.speed;
+	}
+	
+	public PhysicalEntity getBrosse(){
+		return this.brosse;
+	}
+
 	@Override
 	public String toString(){
 		return this.brosse.toString();
-	}
-	
-	private class PlayerTile extends Tile {
-		
-		public PlayerTile(String texturePath, float x, float y){
-			super();
-			
-			this.setTexture(Texture.loadTexture(texturePath));
-			
-			this.setPosition(new Vector2f(x, y));
-			
-			this.setScale(new Vector2f(this.getTexture().width, this.getTexture().height));
-			
-			this.applyTransform();
-		}
 	}
 }

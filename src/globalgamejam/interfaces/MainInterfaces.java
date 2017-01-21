@@ -41,7 +41,7 @@ public class MainInterfaces {
         guis.add(p2);
         
         //Menu Help
-        helpLabel = new GUILabel("HELP",Main.WIDTH/2,10,Color.WHITE,"Arial",16);
+        helpLabel = new GUILabel("HELP",Main.WIDTH/2,10,Color.WHITE,"Arial",32);
         helpLabel.setX(Main.WIDTH/2 - helpLabel.getWitdh()/2);
         guisHelp.add(helpLabel);
     }
