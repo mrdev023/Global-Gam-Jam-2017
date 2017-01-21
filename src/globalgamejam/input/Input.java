@@ -3,13 +3,18 @@ package globalgamejam.input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.*;
-import java.util.Map.*;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
-import org.lwjgl.glfw.*;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.lwjgl.glfw.GLFWJoystickCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
 
-import globalgamejam.*;
-import globalgamejam.math.*;
+import globalgamejam.Main;
+import globalgamejam.math.Vector2f;
 
 /**
  * Class created by MrDev023 (Florian RICHER) on 14/01/2017
@@ -18,6 +23,9 @@ public class Input{
 
 	public static GLFWScrollCallback scroll;
 	public static GLFWCursorPosCallback mousePos;
+	public static GLFWJoystickCallback joyCall;
+	
+	private static ArrayList<Integer> joysticks = new ArrayList<Integer>();
 
 	private static Vector2f mousePosition = new Vector2f();
 	private static Vector2f dMouse = new Vector2f();
@@ -25,13 +33,33 @@ public class Input{
 
 	public static final int NONE = 0,PRESSED = 1,RELEASED = 2,REPEATED = 3,UP = 4,DOWN = 5,
 			NBRE_KEY = 0x15D,NBRE_BUTTON = 10,
-			MOUSE_OFFSET = NBRE_KEY + 1,MOUSE_WHEEL_OFFSET = MOUSE_OFFSET + 1;
+			MOUSE_OFFSET = NBRE_KEY + 1,MOUSE_WHEEL_OFFSET = MOUSE_OFFSET + 1,
+			NBRE_MAX_JOYSTICK = 16;
 
 	private static HashMap<Integer,Integer> state = new HashMap<Integer,Integer>();
 
 	private static double ywheel = 0;
 
 	public static void init(){
+		for(int i = 0;i < NBRE_MAX_JOYSTICK;i++){
+			if(glfwJoystickPresent(GLFW_JOYSTICK_1 + i))joysticks.add(GLFW_JOYSTICK_1 + i);
+		}
+		glfwSetJoystickCallback(joyCall = new GLFWJoystickCallback() {
+			
+			@Override
+			public void invoke(int id, int event) {
+				if (event == GLFW_CONNECTED)
+			    {
+			        joysticks.add(id);
+			        System.out.println(glfwGetJoystickName(id) + " connecter");
+			    }
+			    else if (event == GLFW_DISCONNECTED)
+			    {
+			        joysticks.remove(id);
+			        System.out.println("Manettes #" + id + " deconnecter");
+			    }
+			}
+		});
 		glfwSetScrollCallback(Main.windowID, scroll = new GLFWScrollCallback() {
 			public void invoke(long window, double xoffset, double yoffset) {
 				scroll(window, xoffset, yoffset);
@@ -243,6 +271,16 @@ public class Input{
 		return MOUSE_WHEEL_OFFSET;
 	}
 
+	public static FloatBuffer getJoysticksAxis(int i){
+		return glfwGetJoystickAxes(joysticks.get(i));
+	}
+	
+	public static ByteBuffer getJoysticksButton(int i){
+		return glfwGetJoystickButtons(joysticks.get(i));
+	}
 
+	public static ArrayList<Integer> getJoysticks() {
+		return joysticks;
+	}
 
 }

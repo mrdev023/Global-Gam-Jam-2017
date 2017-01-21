@@ -9,6 +9,8 @@ import globalgamejam.game.Mur;
  */
 public class PhysicalEntity {
 
+	private final static float MAX_SPEED = 15f;
+	
 	protected float x;
 	protected float y;
 
@@ -83,22 +85,22 @@ public class PhysicalEntity {
 		if(entity instanceof Mur){
 			
 			// on a touché le bas du Mur
-			if(this.y <= entity.y - entity.sizeY / 2){
+			if(this.y <= entity.y - entity.sizeY / 2 && this.yVelocity > 0){
 				this.yVelocity *= -1;
 			}
 			
 			// on a touché le haut du Mur
-			if(this.y >= entity.y + entity.sizeY / 2){
+			if(this.y >= entity.y + entity.sizeY / 2 && this.yVelocity < 0){
 				this.yVelocity *= -1;
 			}
 			
 			// on a touché le coté gauche du Mur
-			if(this.x <= entity.x - entity.sizeX / 2){
+			if(this.x <= entity.x - entity.sizeX / 2  && this.xVelocity > 0){
 				this.xVelocity *= -1;
 			}
 			
 			// on a touché le coté droit du Mur
-			if(this.x >= entity.x + entity.sizeX / 2){
+			if(this.x >= entity.x + entity.sizeX / 2  && this.xVelocity < 0){
 				this.xVelocity *= -1;
 			}
 			
@@ -121,15 +123,22 @@ public class PhysicalEntity {
 		this.xVelocity *= 1 - this.frictionFactor;
 		this.yVelocity *= 1 - this.frictionFactor;
 		
-		if(this.xVelocity < 0.01 && this.xVelocity > 0.01){
+		if(this.xVelocity < 0.01 && this.xVelocity > -0.01){
 			this.xVelocity = 0;
 		}
 		
-		if(this.yVelocity < 0.01 && this.yVelocity > 0.01){
+		if(this.yVelocity < 0.01 && this.yVelocity > -0.01){
 			this.yVelocity = 0;
 		}
 		
 		this.speed = (float)Math.sqrt( this.xVelocity * this.xVelocity + this.yVelocity * this.yVelocity );
+		
+		if(this.speed >= PhysicalEntity.MAX_SPEED){
+			this.xVelocity = (this.xVelocity * PhysicalEntity.MAX_SPEED) / this.speed;
+			this.yVelocity = (this.yVelocity * PhysicalEntity.MAX_SPEED) / this.speed;
+			
+			this.speed = PhysicalEntity.MAX_SPEED;
+		}
 		
 		this.moveTile();
 	}

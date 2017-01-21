@@ -21,9 +21,9 @@ public class Player extends PhysicalEntity {
 	private final PhysicalEntity brosse;
 	private final float longueurBalai;
 	
-	public Player(float x, float y){
+	public Player(String path, float x, float y){
 		super(x, y, 0, 0, 3, 0, 0, 10);
-		this.tile = new PlayerTile("res/textures/perso.png", x, y);
+		this.tile = new PlayerTile(path, x, y);
 		
 		this.setSizeXY(this.tile.getTexture().width, this.tile.getTexture().height);
 		
