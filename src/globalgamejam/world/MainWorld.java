@@ -55,69 +55,72 @@ public class MainWorld {
     }
 
     public void update(){
-        //Player 1
-    	float xDep = 0, yDep = 0;
-	    if(Input.isKey(GLFW.GLFW_KEY_W)){
-	    	yDep = 10;
-	    }
-	    if(Input.isKey(GLFW.GLFW_KEY_S)){
-	    	yDep = -10;
-	    }
-	    if(Input.isKey(GLFW.GLFW_KEY_A)){
-	    	xDep = -10;
-	    }
-	    if(Input.isKey(GLFW.GLFW_KEY_D)){
-	    	xDep = 10;
-	    }
-	    
-	    if(xDep != 0.0 && yDep != 0.0){
-	    	xDep *= Math.cos(Math.PI / 4);
-	    	yDep *= Math.cos(Math.PI / 4);
-	    }
-	    
-	    player1.move(xDep, yDep);
-	    
-	    if(Input.isKey(GLFW.GLFW_KEY_Q)){
-	    	player1.rotate(-5);
-	    }
-	    if(Input.isKey(GLFW.GLFW_KEY_E)){
-	    	player1.rotate(5);
-	    }
+    	if(!Input.isKey(this.game.helpKey)){
+    		//Player 1
+        	float xDep = 0, yDep = 0;
+    	    if(Input.isKey(GLFW.GLFW_KEY_W)){
+    	    	yDep = 10;
+    	    }
+    	    if(Input.isKey(GLFW.GLFW_KEY_S)){
+    	    	yDep = -10;
+    	    }
+    	    if(Input.isKey(GLFW.GLFW_KEY_A)){
+    	    	xDep = -10;
+    	    }
+    	    if(Input.isKey(GLFW.GLFW_KEY_D)){
+    	    	xDep = 10;
+    	    }
+    	    
+    	    if(xDep != 0.0 && yDep != 0.0){
+    	    	xDep *= Math.cos(Math.PI / 4);
+    	    	yDep *= Math.cos(Math.PI / 4);
+    	    }
+    	    
+    	    player1.move(xDep, yDep);
+    	    
+    	    if(Input.isKey(GLFW.GLFW_KEY_Q)){
+    	    	player1.rotate(-5);
+    	    }
+    	    if(Input.isKey(GLFW.GLFW_KEY_E)){
+    	    	player1.rotate(5);
+    	    }
 
-	    //Player 2
-        xDep = 0;
-	    yDep = 0;
-        if(Input.isKey(GLFW.GLFW_KEY_I)){
-            yDep = 10;
-        }
-        if(Input.isKey(GLFW.GLFW_KEY_K)){
-            yDep = -10;
-        }
-        if(Input.isKey(GLFW.GLFW_KEY_J)){
-            xDep = -10;
-        }
-        if(Input.isKey(GLFW.GLFW_KEY_L)){
-            xDep = 10;
-        }
+    	    //Player 2
+            xDep = 0;
+    	    yDep = 0;
+            if(Input.isKey(GLFW.GLFW_KEY_I)){
+                yDep = 10;
+            }
+            if(Input.isKey(GLFW.GLFW_KEY_K)){
+                yDep = -10;
+            }
+            if(Input.isKey(GLFW.GLFW_KEY_J)){
+                xDep = -10;
+            }
+            if(Input.isKey(GLFW.GLFW_KEY_L)){
+                xDep = 10;
+            }
 
-        if(xDep != 0.0 && yDep != 0.0){
-            xDep *= Math.cos(Math.PI / 4);
-            yDep *= Math.cos(Math.PI / 4);
-        }
+            if(xDep != 0.0 && yDep != 0.0){
+                xDep *= Math.cos(Math.PI / 4);
+                yDep *= Math.cos(Math.PI / 4);
+            }
 
-        player2.move(xDep, yDep);
+            player2.move(xDep, yDep);
 
-        if(Input.isKey(GLFW.GLFW_KEY_U)){
-            player2.rotate(-5);
-        }
-        if(Input.isKey(GLFW.GLFW_KEY_O)){
-            player2.rotate(5);
-        }
-
+            if(Input.isKey(GLFW.GLFW_KEY_U)){
+                player2.rotate(-5);
+            }
+            if(Input.isKey(GLFW.GLFW_KEY_O)){
+                player2.rotate(5);
+            }
+    	}
     }
 
     public void render(){
-    	for(Tile t : tiles)t.render();
+    	if(!Input.isKey(this.game.helpKey)){
+    		for(Tile t : tiles)t.render();
+    	}
     }
 
     public void destroy(){
