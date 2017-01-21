@@ -18,6 +18,7 @@ public abstract class GUI {
         this.y = y;
         this.width = 0;
         this.height = 0;
+        this.action = new ActionGUI();
     }
 
     public void setAction(IActionGUI action){

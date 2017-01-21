@@ -54,9 +54,9 @@ public class GUILabel extends GUI {
 		this.vbo = GL15.glGenBuffers();
 		float[] a = new float[]{
 				0,0,        0.0f,0.0f,
-				this.texture.width,0,         1.0f,0.0f,
-				this.texture.width,this.texture.height,          1.0f,1.0f,
-				0,this.texture.height,         0.0f,1.0f
+				1,0,         1.0f,0.0f,
+				1,1,          1.0f,1.0f,
+				0,1,         0.0f,1.0f
 		};
 		FloatBuffer buff = BufferUtils.createFloatBuffer(a.length);
 		buff.put(a).flip();
@@ -72,6 +72,7 @@ public class GUILabel extends GUI {
 		Shaders.MAIN_SHADERS.uniform("camera", Camera.matrix);
 		Matrix4f transform = new Matrix4f();
 		transform.translate(super.x,super.y,0);
+		transform.scale(this.getWitdh(),this.getHeight(),1);
 		Shaders.MAIN_SHADERS.uniform("transform", transform);
 		Shaders.MAIN_SHADERS.uniform("projection", DisplayManager.projection);
 		Shaders.MAIN_SHADERS.uniform("color", Color4f.WHITE);
@@ -142,8 +143,6 @@ public class GUILabel extends GUI {
 		this.texture = Texture.loadFont(text,color,font,size);
 	}
 
-
-	
 	/**
 	 * Return the x coordonnate of the Label (upper left corner)
 	 * @return x (float) : the x coordonnate of the Label
@@ -191,7 +190,7 @@ public class GUILabel extends GUI {
 	 * @return witdh (int) : the width
 	 */
 	public int getWitdh() {
-		return super.width;
+		return this.texture.width;
 	}
 
 	/**
@@ -199,7 +198,7 @@ public class GUILabel extends GUI {
 	 * @return height (int) : the height
 	 */
 	public int getHeight() {
-		return super.height;
+		return  this.texture.height;
 	}
 
 	public void destroy(){
