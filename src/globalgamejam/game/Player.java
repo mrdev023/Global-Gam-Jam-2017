@@ -16,18 +16,20 @@ public class Player extends PhysicalEntity {
 	private final Tile tile;
 	private float angle;
 	
-	private float speed = 3;
+	private float speed = 15;
 	
 	private final PhysicalEntity brosse;
 	private final float longueurBalai;
 	
 	public Player(float x, float y){
-		super(x, y, 100, 3, 0, 0, 10);
+		super(x, y, 0, 0, 3, 0, 0, 10);
 		this.tile = new PlayerTile("res/textures/perso.png", x, y);
 		
-		this.longueurBalai = 80;
+		this.setSizeXY(this.tile.getTexture().width, this.tile.getTexture().height);
 		
-		this.brosse = new PhysicalEntity(x, y + this.longueurBalai, 2f, 3, 0, 0, 0){
+		this.longueurBalai = 82;
+		
+		this.brosse = new PhysicalEntity(x, y + this.longueurBalai, 18f, 12f, 15, 0, 0, 0){
 			@Override
 			public float getSpeed(){
 				return getSpeedFactor();
@@ -41,6 +43,7 @@ public class Player extends PhysicalEntity {
 	
 	public void move(float x, float y){
 		this.addPosition(x, y);
+		
 		this.tile.setPosition(new Vector2f(this.x, this.y));
 		this.tile.applyTransform();
 		
@@ -84,4 +87,10 @@ public class Player extends PhysicalEntity {
 	public String toString(){
 		return this.brosse.toString();
 	}
+
+	public float getAngle() {
+		return angle;
+	}
+	
+	
 }

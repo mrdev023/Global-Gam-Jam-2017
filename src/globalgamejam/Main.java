@@ -80,7 +80,7 @@ public class Main {
 
         while(!glfwWindowShouldClose(windowID)){
 
-            if(System.currentTimeMillis() - previousTicks >= 1000/60){//Update TICKS
+            if(System.currentTimeMillis() - previousTicks >= 1000/120){//Update TICKS
                 glfwPollEvents();
                 Input.update();
                 game.update();

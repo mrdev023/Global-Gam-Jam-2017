@@ -8,8 +8,7 @@ public class ObjetTile extends Tile {
 	
 	public ObjetTile(String texturePath, float x, float y){
 		super();
-		super.setColor(Color4f.RED);
-	//	this.setTexture(Texture.loadTexture(texturePath));
+		this.setTexture(Texture.loadTexture(texturePath));
 		
 		this.setPosition(new Vector2f(x, y));
 		

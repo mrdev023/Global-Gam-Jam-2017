@@ -12,6 +12,7 @@ import globalgamejam.world.MainWorld;
  */
 public class MainGame extends Game{
 
+	public static final int MAX_SCORE = 1000;
 	private MainWorld world;
 	private MainInterfaces interfaces;
     public int[] scores;
@@ -20,8 +21,18 @@ public class MainGame extends Game{
 	@Override
 	public void init() {
 		this.scores = new int[2];
+		this.scores[0] = MAX_SCORE;
+		this.scores[1] = MAX_SCORE;
 		world = new MainWorld(this);
 		interfaces = new MainInterfaces(this);
+	}
+	
+	public void reset(){
+		this.scores[0] = MAX_SCORE;
+		this.scores[1] = MAX_SCORE;
+		world.destroy();
+		world = new MainWorld(this);
+		world.init();
 	}
 
 	@Override

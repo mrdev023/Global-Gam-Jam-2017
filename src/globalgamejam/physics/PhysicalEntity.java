@@ -1,5 +1,7 @@
 package globalgamejam.physics;
 
+import globalgamejam.game.Mur;
+
 /**
  * 
  * @author Jean-Baptiste
@@ -9,8 +11,10 @@ public class PhysicalEntity {
 
 	protected float x;
 	protected float y;
-	
-	private float sizeRadius;
+
+//	private float sizeRadius;
+	private float sizeX;
+	private float sizeY;
 	
 	private float xVelocity;
 	private float yVelocity;
@@ -20,41 +24,91 @@ public class PhysicalEntity {
 	
 	private float frictionFactor;
 	
-	public PhysicalEntity(float x, float y, float sizeRadius, float speedFactor, float xVelocity, float yVelocity, float frictionFactor) {
+/*	public PhysicalEntity(float x, float y, float sizeRadius, float speedFactor, float xVelocity, float yVelocity, float frictionFactor) {
 		this.x = x;
 		this.y = y;
+		this.sizeX = sizeRadius * 2;
+		this.sizeY = sizeRadius * 2;
 		this.sizeRadius = sizeRadius;
 		this.xVelocity = xVelocity;
 		this.yVelocity = yVelocity;
 		this.frictionFactor = frictionFactor;
 		this.speedFactor = speedFactor;
 		this.speed = 0;
+	}*/
+	
+	public PhysicalEntity(float x, float y, float sizeX, float sizeY, float speedFactor, float xVelocity, float yVelocity, float frictionFactor) {
+		this.x = x;
+		this.y = y;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+	//	this.sizeRadius = -1;
+		this.xVelocity = xVelocity;
+		this.yVelocity = yVelocity;
+		this.frictionFactor = frictionFactor;
+		this.speedFactor = speedFactor;
+		this.speed = 0;
 	}
-
+	
+	public boolean collideWith(PhysicalEntity entity){
+	//	if(this.sizeRadius == -1 || entity.sizeRadius == -1){
+			return this.collideWithSquareHitBox(entity);
+	/*	}
+		else{
+			return this.collideWithRoundHitBox(entity);
+		}*/
+	}
+	
 	public boolean collideWithSquareHitBox(PhysicalEntity entity){
 		
 		// on teste une collision avec une hitbox carré
-		return (this.x + this.sizeRadius >= entity.x - entity.sizeRadius
-			&& this.x - this.sizeRadius <= entity.x + entity.sizeRadius
-			&& this.y + this.sizeRadius >= entity.y - entity.sizeRadius
-			&& this.y - this.sizeRadius <= entity.y + entity.sizeRadius);
+		return (this.x + this.sizeX / 2 >= entity.x - entity.sizeX / 2
+			&& this.x - this.sizeX / 2 <= entity.x + entity.sizeX / 2
+			&& this.y + this.sizeY / 2 >= entity.y - entity.sizeY / 2
+			&& this.y - this.sizeY / 2 <= entity.y + entity.sizeY / 2);
 	}
 	/*
 	public boolean collideWithRoundHitBox(PhysicalEntity entity){
-		if(this.collideWithSquareHitBox(entity)){
-			
-			// teste avec une hitbox ronde à venir ...
-			return true;
-		}
-		return false;
+		
+		float distX = this.x - entity.x;
+		float distY = this.y - entity.y;
+		
+		float dist = (float)Math.sqrt( distX * distX + distY * distY );
+		
+		return dist <= this.sizeRadius + entity.sizeRadius;
 	}
 	*/
-	
 	public void resolveCollideWith(PhysicalEntity entity){
-		float xVel = entity.getSpeed() * (this.getX() - entity.getX()) / this.getSizeRadius();
-		float yVel = entity.getSpeed() * (this.getY() - entity.getY()) / this.getSizeRadius();
 		
-		this.addVelocity(xVel, yVel);
+		if(entity instanceof Mur){
+			
+			// on a touché le bas du Mur
+			if(this.y <= entity.y - entity.sizeY / 2){
+				this.yVelocity *= -1;
+			}
+			
+			// on a touché le haut du Mur
+			if(this.y >= entity.y + entity.sizeY / 2){
+				this.yVelocity *= -1;
+			}
+			
+			// on a touché le coté gauche du Mur
+			if(this.x <= entity.x - entity.sizeX / 2){
+				this.xVelocity *= -1;
+			}
+			
+			// on a touché le coté droit du Mur
+			if(this.x >= entity.x + entity.sizeX / 2){
+				this.xVelocity *= -1;
+			}
+			
+		}
+		else{
+			float xVel = entity.getSpeed() * (this.getX() - entity.getX()) / this.getSizeRadius();
+			float yVel = entity.getSpeed() * (this.getY() - entity.getY()) / this.getSizeRadius();
+			
+			this.addVelocity(xVel, yVel);
+		}
 	}
 	
 	/**
@@ -67,11 +121,11 @@ public class PhysicalEntity {
 		this.xVelocity *= 1 - this.frictionFactor;
 		this.yVelocity *= 1 - this.frictionFactor;
 		
-		if(this.xVelocity < 0.001 && this.xVelocity > 0.001){
+		if(this.xVelocity < 0.01 && this.xVelocity > 0.01){
 			this.xVelocity = 0;
 		}
 		
-		if(this.yVelocity < 0.001 && this.yVelocity > 0.001){
+		if(this.yVelocity < 0.01 && this.yVelocity > 0.01){
 			this.yVelocity = 0;
 		}
 		
@@ -136,7 +190,18 @@ public class PhysicalEntity {
 	 * @return the sizeRadius
 	 */
 	public float getSizeRadius() {
-		return sizeRadius;
+		return (this.sizeX + this.sizeY) / 2;
+	}
+/*	
+	public void setSizeRadius(float size){
+		this.sizeRadius = size;
+		this.sizeX = size;
+		this.sizeY = size;
+	}*/
+	
+	public void setSizeXY(float sizeX, float sizeY){
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
 	}
 	
 	@Override
