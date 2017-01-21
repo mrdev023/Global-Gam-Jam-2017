@@ -20,7 +20,7 @@ public class Player extends PhysicalEntity {
 	
 	public Player(float x, float y){
 		super(x, y, 100, 0, 0, 10);
-		this.tile = new PlayerTile("res/textures/default.png", -250, 0);
+		this.tile = new PlayerTile("res/textures/perso.png", x, y);
 		
 		this.longueurBalai = 100;
 		this.brosse = new PhysicalEntity(x, y + this.longueurBalai, 20, 0, 0, 0);
@@ -28,6 +28,14 @@ public class Player extends PhysicalEntity {
 	
 	public Tile getTile(){
 		return this.tile;
+	}
+	
+	public void move(float x, float y){
+		this.addPosition(x, y);
+		this.tile.setPosition(new Vector2f(this.x, this.y));
+		this.tile.applyTransform();
+		
+		this.brosse.addPosition(x, y);
 	}
 	
 	public void rotate(float angleRotation){
@@ -38,6 +46,7 @@ public class Player extends PhysicalEntity {
 		}
 		
 		this.tile.setRotation(this.angle);
+		this.tile.applyTransform();
 		
 		float angleRad = (float)(this.angle * (Math.PI / 180));
 		
@@ -51,6 +60,11 @@ public class Player extends PhysicalEntity {
 		return this.brosse.collideWithSquareHitBox(entity);
 	}
 	
+	@Override
+	public String toString(){
+		return this.brosse.toString();
+	}
+	
 	private class PlayerTile extends Tile {
 		
 		public PlayerTile(String texturePath, float x, float y){
@@ -58,16 +72,11 @@ public class Player extends PhysicalEntity {
 			
 			this.setTexture(Texture.loadTexture(texturePath));
 			
-			this.setPosition(x, y);
-			
-			this.setScale(new Vector2f(50, 50));
-			
-			this.applyTransform();
-		}
-		
-		public void setPosition(float x, float y){
 			this.setPosition(new Vector2f(x, y));
 			
+			this.setScale(new Vector2f(this.getTexture().width, this.getTexture().height));
+			
+			this.applyTransform();
 		}
 	}
 }
