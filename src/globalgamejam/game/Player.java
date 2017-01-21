@@ -25,7 +25,7 @@ public class Player extends PhysicalEntity {
 		super(x, y, 0, 0, 3, 0, 0, 10);
 		this.tile = new PlayerTile(path, x, y);
 		
-		this.setSizeXY(this.tile.getTexture().width, this.tile.getTexture().height);
+		this.setSizeXY(this.tile.getTexture().width, this.tile.getTexture().width);
 		
 		this.longueurBalai = 82;
 		
@@ -48,6 +48,21 @@ public class Player extends PhysicalEntity {
 		this.tile.applyTransform();
 		
 		this.brosse.addPosition(x, y);
+	}
+	
+/*	@Override
+	public boolean collideWithMur(PhysicalEntity entity){
+		float distX = this.x - entity.getX();
+		float distY = this.y - entity.getY();
+		
+		float dist = (float)Math.sqrt( distX * distX + distY * distY );
+		
+		return dist <= this.sizeRadius + entity.sizeRadius;
+	}*/
+	
+	@Override
+	public void resolveCollideWith(PhysicalEntity entity){
+		
 	}
 	
 	public void rotate(float angleRotation){

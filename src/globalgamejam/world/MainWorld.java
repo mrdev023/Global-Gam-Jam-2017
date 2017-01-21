@@ -23,7 +23,9 @@ import globalgamejam.tiles.VaguesTile;
  */
 public class MainWorld {
 
-    private ArrayList<Tile> tiles;
+    private ArrayList<Tile> arrierePlan;
+    private ArrayList<Tile> objetPlan;
+    private ArrayList<Tile> premierPlan;
 
     private MainGame game;
     
@@ -45,7 +47,9 @@ public class MainWorld {
 
     public MainWorld(MainGame game){
         this.game = game;
-        tiles = new ArrayList<>();
+        arrierePlan = new ArrayList<>();
+        objetPlan = new ArrayList<>();
+        premierPlan = new ArrayList<>();
         listObjet = new ArrayList<>();
         listMur = new ArrayList<>();
         init();
@@ -70,15 +74,15 @@ public class MainWorld {
 		this.mur1 = new Mur(Main.WIDTH/2,Main.HEIGHT-20,"res/textures/murmilieuhaut.png");
 		this.mur2 = new Mur(Main.WIDTH/2, Main.HEIGHT/2+30 ,"res/textures/murmilieumilieu.png");
 		this.mur3 = new Mur(Main.WIDTH/2, 100, "res/textures/murmilieubas.png");
-		tiles.add(fond);
+		arrierePlan.add(fond);
 		
-        tiles.add(mur1.getTile());
-        tiles.add(mur2.getTile());
-        tiles.add(mur3.getTile());
-		tiles.add(murGauche.getTile());
-		tiles.add(murDroit.getTile());
-		tiles.add(murHaut.getTile());
-		tiles.add(murBas.getTile());
+		arrierePlan.add(mur1.getTile());
+		arrierePlan.add(mur2.getTile());
+		arrierePlan.add(mur3.getTile());
+		arrierePlan.add(murGauche.getTile());
+		arrierePlan.add(murDroit.getTile());
+		arrierePlan.add(murHaut.getTile());
+		arrierePlan.add(murBas.getTile());
 
 
         
@@ -92,10 +96,10 @@ public class MainWorld {
         listMur.add(murHaut);
         listMur.add(murBas);
         
-        tiles.add(vagues);
+        premierPlan.add(vagues);
         
-		tiles.add(player1.getTile());
-        tiles.add(player2.getTile());
+        premierPlan.add(player1.getTile());
+        premierPlan.add(player2.getTile());
         
         tempsEntreVague=0;
         TempsAncienneVague=System.currentTimeMillis();
@@ -255,7 +259,7 @@ public class MainWorld {
             	}
             	
             	for(Objet o : listObjetADespawn){
-        			this.tiles.remove(o.getTile());
+        			this.objetPlan.remove(o.getTile());
         	    	this.listObjet.remove(o);
         	    }
             	
@@ -312,13 +316,20 @@ public class MainWorld {
 
     public void render(){
     	if(!Input.isKey(this.game.helpKey) && this.game.scores[0] > 0 && this.game.scores[1] > 0 && MainGame.time_in_sec > 0){
-    		for(Tile t : tiles)t.render();
+    		for(Tile t : arrierePlan)t.render();
+    		for(Tile t : objetPlan)t.render();
+    		for(Tile t : premierPlan)t.render();
     	}
     }
 
     public void destroy(){
-        for(Tile t : tiles)t.destroy();
-        tiles.clear();
+        for(Tile t : arrierePlan)t.destroy();
+        arrierePlan.clear();
+        
+        for(Tile t : objetPlan)t.destroy();
+        objetPlan.clear();
+        for(Tile t : premierPlan)t.destroy();
+        premierPlan.clear();
     }
     
     public void genererBonusMalus(int nombre){
@@ -329,7 +340,7 @@ public class MainWorld {
     		EObjetType type = types[(int)(Math.random() * types.length)];
     		Objet o = new Objet(type.getFilename(), (float)(Math.random() * (minHeight - minWidth)), 150, 0, 0, 5, 0.02f);
     		o.setType(type);
-    		tiles.add(o.getTile());
+    		objetPlan.add(o.getTile());
     		listObjet.add(o);
     	}
     }

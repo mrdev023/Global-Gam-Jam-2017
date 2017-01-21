@@ -56,8 +56,8 @@ public class MainInterfaces {
     }
 
     public void init(){
-        p1 = new GUILabel("Player 1 : ", Main.WIDTH/4,10, Color.BLACK,"Arial",16);
-        p2 = new GUILabel("Player 2 : ", Main.WIDTH/4 * 3,10, Color.BLACK,"Arial",16);
+        p1 = new GUILabel("Player 1 : ", Main.WIDTH/4,10, Color.RED,"Arial",16);
+        p2 = new GUILabel("Player 2 : ", Main.WIDTH/4 * 3,10, Color.BLUE,"Arial",16);
         timer = new GUILabel(" ", Main.WIDTH/4 * 2,10, Color.BLACK,"Arial",16);
         guis.add(p1);
         guis.add(p2);
