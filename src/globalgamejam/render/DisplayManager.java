@@ -20,8 +20,8 @@ public class DisplayManager {
 		projection.loadIdentity();
 //		projection.Ortho2D(-Main.WIDTH/2.0f, Main.WIDTH/2.0f, -Main.HEIGHT/2.0f, Main.HEIGHT/2.0f, -1, 1);
 		projection.Ortho2D(0, Main.WIDTH, 0, Main.HEIGHT, -1, 1);
-		glEnable(GL_DEPTH_TEST);
-	    glDepthFunc(GL_LESS);
+		//glEnable(GL_DEPTH_TEST);
+	    //glDepthFunc(GL_LESS);
 	    glEnable(GL_BLEND);
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
@@ -30,8 +30,8 @@ public class DisplayManager {
 		projection.loadIdentity();
 		//Permet de centrer la camera au centre de l'ecran
 		projection.Ortho2D(0, Main.WIDTH, Main.HEIGHT, 0, -1, 1);
-		glEnable(GL_DEPTH_TEST);
-	    glDepthFunc(GL_LESS);
+		//glEnable(GL_DEPTH_TEST);
+	    //glDepthFunc(GL_LESS);
 	    glEnable(GL_BLEND);
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}

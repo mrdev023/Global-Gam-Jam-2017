@@ -15,7 +15,6 @@ import globalgamejam.gui.GUILabel;
 import globalgamejam.render.Camera;
 import globalgamejam.tiles.Fond;
 import globalgamejam.tiles.Objet;
-import globalgamejam.tiles.TestTile;
 import globalgamejam.tiles.Tile;
 
 

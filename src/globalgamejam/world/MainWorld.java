@@ -1,22 +1,17 @@
 package globalgamejam.world;
 
+import java.util.ArrayList;
+
+import org.lwjgl.glfw.GLFW;
+
 import globalgamejam.Main;
 import globalgamejam.game.MainGame;
 import globalgamejam.game.Player;
-import globalgamejam.gui.ActionGUI;
-import globalgamejam.gui.GUI;
-import globalgamejam.gui.GUILabel;
 import globalgamejam.input.Input;
 import globalgamejam.tiles.Fond;
+import globalgamejam.tiles.Mur;
 import globalgamejam.tiles.Objet;
-import globalgamejam.tiles.TestTile;
 import globalgamejam.tiles.Tile;
-
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Created by trexr on 20/01/2017.
@@ -28,6 +23,7 @@ public class MainWorld {
     private MainGame game;
     
     private Player player1,player2;
+    private Mur mur1,mur2,mur3;
 
     public MainWorld(MainGame game){
         this.game = game;
@@ -43,10 +39,17 @@ public class MainWorld {
 		Fond fond = new Fond("res/textures/fond.png");
 		fond.getTransform().translate(Main.WIDTH/2, Main.HEIGHT/2, 0);
 		fond.getTransform().scale(Main.WIDTH,Main.HEIGHT, 0);
+		
+		this.mur1 = new Mur(Main.WIDTH/2-10, Main.HEIGHT - 50, 20, 150);
+		this.mur2 = new Mur(Main.WIDTH/2-10, Main.HEIGHT - 250, 20, 50);
+		this.mur3 = new Mur(Main.WIDTH/2-10, Main.HEIGHT - 400, 20, 150);
 
 		tiles.add(fond);
 		tiles.add(player1.getTile());
         tiles.add(player2.getTile());
+        tiles.add(this.mur1);
+        tiles.add(this.mur2);
+        tiles.add(this.mur3);
 		
 		generateEntity(3);
     }
@@ -114,11 +117,11 @@ public class MainWorld {
     }
 
     public void render(){
-    	for(int i = tiles.size() - 1;i >= 0 ;i--)
-			tiles.get(i).render();
+    	for(Tile t : tiles)t.render();
     }
 
     public void destroy(){
+        for(Tile t : tiles)t.destroy();
         tiles.clear();
     }
     

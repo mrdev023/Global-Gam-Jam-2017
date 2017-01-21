@@ -4,6 +4,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="libs"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lwjgl"/>
+	<classpathentry kind="lib" path="libs/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Global-Gam-Jam-2017/libs"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="out/production/Global-Gam-Jam-2017"/>
 </classpath>

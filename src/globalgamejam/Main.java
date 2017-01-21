@@ -71,7 +71,7 @@ public class Main {
 
         //initialisation
         //------------------------------------------------------------------------------------
-        glEnable(GL_MULTISAMPLE);//Activation du MSAA
+        //glEnable(GL_MULTISAMPLE);//Activation du MSAA
         Input.init();
         game = new MainGame();
 
