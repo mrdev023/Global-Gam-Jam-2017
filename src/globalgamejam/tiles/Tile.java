@@ -33,10 +33,10 @@ public abstract class Tile {
         this.color = Color4f.WHITE;
         this.vbo = GL15.glGenBuffers();
         float[] a = new float[]{
-                -.5f,-.5f,        0.0f,0.0f,
-                .5f,-.5f,         1.0f,0.0f,
-                .5f,.5f,          1.0f,1.0f,
-                -.5f,.5f,         0.0f,1.0f
+                -.5f,-.5f,        0.0f,1.0f,
+                .5f,-.5f,         1.0f,1.0f,
+                .5f,.5f,          1.0f,0.0f,
+                -.5f,.5f,         0.0f,0.0f
         };
         FloatBuffer buffer = BufferUtils.createFloatBuffer(a.length);
         buffer.put(a).flip();

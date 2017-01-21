@@ -14,6 +14,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.lwjgl.glfw.GLFW;
+
 /**
  * Class created by MrDev023 (Florian RICHER) on 14/01/2017
  */
@@ -38,7 +40,7 @@ public class MainGame extends Game{
 		t.getTransform().scale(10,10,0);
 		tiles.add(t);
 		
-		player1 = new Player(-100, 0);
+		player1 = new Player(200, 150);
 		tiles.add(player1.getTile());
 		
 		rand = new Random();
@@ -63,10 +65,39 @@ public class MainGame extends Game{
 	@Override
 	public void update() {
 	    Camera.transform();
-	  //  player1.setPosition((rand.nextFloat() - 0.5f) * 200f, (rand.nextFloat() - 0.5f) * 150f);
-	  //  player1.applyTransform();
+	    
+	    float xDep = 0, yDep = 0;
+	    if(Input.isKey(GLFW.GLFW_KEY_W)){
+	    	yDep = 10;
+	    }
+	    if(Input.isKey(GLFW.GLFW_KEY_S)){
+	    	yDep = -10;
+	    }
+	    if(Input.isKey(GLFW.GLFW_KEY_A)){
+	    	xDep = -10;
+	    }
+	    if(Input.isKey(GLFW.GLFW_KEY_D)){
+	    	xDep = 10;
+	    }
+	    
+	    if(xDep != 0.0 && yDep != 0.0){
+	    	xDep *= Math.cos(Math.PI / 4);
+	    	yDep *= Math.cos(Math.PI / 4);
+	    }
+	    
+	    player1.move(xDep, yDep);
+	    
+	    if(Input.isKey(GLFW.GLFW_KEY_SPACE)){
+	    	player1.rotate(-5);
+	    }
+	    if(Input.isKey(GLFW.GLFW_KEY_LEFT_ALT)){
+	    	player1.rotate(5);
+	    }
+	    
+	    System.out.println(player1);
+	    
 	    for(GUI g : guis)g.update();
-
+	    
 	}
 
 	@Override
