@@ -12,3 +12,10 @@
 hs_err_pid*
 /.idea/
 /bin/
+
+bin/*
+.project
+.classpath
+
+*.eml
+*.userlibraries

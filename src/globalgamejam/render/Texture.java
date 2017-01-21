@@ -28,7 +28,8 @@ public class Texture {
 	}
 
 	public static Texture loadFont(String text, Color color, String font, int size){
-		Font f_font = new Font(font, Font.PLAIN, size);
+		text = text.toUpperCase();
+		Font f_font = new Font(font, Font.BOLD, size);
 
 		// to get the width of the text
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
