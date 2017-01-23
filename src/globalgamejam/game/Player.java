@@ -1,5 +1,6 @@
 package globalgamejam.game;
 
+import globalgamejam.Main;
 import globalgamejam.math.Vector2f;
 import globalgamejam.physics.PhysicalEntity;
 import globalgamejam.render.Texture;
@@ -22,7 +23,7 @@ public class Player extends PhysicalEntity {
 	private final float longueurBalai;
 	
 	public Player(String path, float x, float y){
-		super(x, y, 0, 0, 3, 0, 0, 10);
+		super(x, y, 100, 0, 3, 0, 0, 10);
 		this.tile = new PlayerTile(path, x, y);
 		
 		this.setSizeXY(this.tile.getTexture().width, this.tile.getTexture().width);
@@ -42,27 +43,32 @@ public class Player extends PhysicalEntity {
 	}
 	
 	public void move(float x, float y){
+		float oldX = this.x;
+		float deltaX = 0;
+		float oldY = this.y;
+		float deltaY = 0;
 		this.addPosition(x, y);
+		
+		if(this.x - this.tile.getTexture().width / 2 < 30){
+			this.x = this.tile.getTexture().width / 2 + 30;
+		}
+		else if(this.x + this.tile.getTexture().width / 2 > Main.WIDTH - 30){
+			this.x = Main.WIDTH - this.tile.getTexture().width / 2 - 30;
+		}
+		
+		if(this.y - this.tile.getTexture().height / 2 < 34){
+			this.y = this.tile.getTexture().height / 2 + 34;
+		}
+		else if(this.y + this.tile.getTexture().height / 2 > Main.HEIGHT + 18){
+			this.y = Main.HEIGHT - this.tile.getTexture().height / 2 + 18;
+		}
 		
 		this.tile.setPosition(new Vector2f(this.x, this.y));
 		this.tile.applyTransform();
-		
-		this.brosse.addPosition(x, y);
-	}
-	
-/*	@Override
-	public boolean collideWithMur(PhysicalEntity entity){
-		float distX = this.x - entity.getX();
-		float distY = this.y - entity.getY();
-		
-		float dist = (float)Math.sqrt( distX * distX + distY * distY );
-		
-		return dist <= this.sizeRadius + entity.sizeRadius;
-	}*/
-	
-	@Override
-	public void resolveCollideWith(PhysicalEntity entity){
-		
+
+		deltaX = this.x - oldX;
+		deltaY = this.y - oldY;
+		this.brosse.addPosition(deltaX, deltaY);
 	}
 	
 	public void rotate(float angleRotation){

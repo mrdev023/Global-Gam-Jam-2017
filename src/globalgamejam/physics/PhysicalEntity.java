@@ -14,7 +14,7 @@ public class PhysicalEntity {
 	protected float x;
 	protected float y;
 
-//	private float sizeRadius;
+	private float sizeRadius;
 	private float sizeX;
 	private float sizeY;
 	
@@ -44,7 +44,7 @@ public class PhysicalEntity {
 		this.y = y;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-	//	this.sizeRadius = -1;
+		this.sizeRadius = sizeX / 2;
 		this.xVelocity = xVelocity;
 		this.yVelocity = yVelocity;
 		this.frictionFactor = frictionFactor;
@@ -53,6 +53,9 @@ public class PhysicalEntity {
 	}
 	
 	public boolean collideWith(PhysicalEntity entity){
+		if(entity == null){
+			return false;
+		}
 	//	if(this.sizeRadius == -1 || entity.sizeRadius == -1){
 			return this.collideWithSquareHitBox(entity);
 	/*	}
@@ -69,17 +72,20 @@ public class PhysicalEntity {
 			&& this.y + this.sizeY / 2 >= entity.y - entity.sizeY / 2
 			&& this.y - this.sizeY / 2 <= entity.y + entity.sizeY / 2);
 	}
-	/*
+	
 	public boolean collideWithRoundHitBox(PhysicalEntity entity){
 		
-		float distX = this.x - entity.x;
-		float distY = this.y - entity.y;
+		if(entity == null){
+			return false;
+		}
+		float distX = Math.abs(this.x - entity.x);
+		float distY = Math.abs(this.y - entity.y);
 		
 		float dist = (float)Math.sqrt( distX * distX + distY * distY );
 		
 		return dist <= this.sizeRadius + entity.sizeRadius;
 	}
-	*/
+	
 	public void resolveCollideWith(PhysicalEntity entity){
 		
 		if(entity instanceof Mur){
@@ -213,6 +219,20 @@ public class PhysicalEntity {
 		this.sizeY = sizeY;
 	}
 	
+	/**
+	 * @return the xVelocity
+	 */
+	public float getxVelocity() {
+		return xVelocity;
+	}
+
+	/**
+	 * @return the yVelocity
+	 */
+	public float getyVelocity() {
+		return yVelocity;
+	}
+
 	@Override
 	public String toString(){
 		return this.x + " " + this.y;

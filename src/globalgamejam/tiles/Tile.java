@@ -86,7 +86,14 @@ public abstract class Tile {
     }
 
     public void setTexture(Texture texture) {
+    	
+    	this.texture.destroy();
+    	
         this.texture = texture;
+    }
+
+    public void setTexture(String path) {
+        this.setTexture(Texture.loadTexture(path));
     }
 
     public Color4f getColor() {

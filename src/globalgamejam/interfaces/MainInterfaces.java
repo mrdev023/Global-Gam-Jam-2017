@@ -1,16 +1,17 @@
 package globalgamejam.interfaces;
 
+import java.awt.Color;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+
+import org.lwjgl.glfw.GLFW;
+
 import globalgamejam.Main;
 import globalgamejam.game.MainGame;
 import globalgamejam.gui.ActionGUI;
 import globalgamejam.gui.GUI;
 import globalgamejam.gui.GUILabel;
 import globalgamejam.input.Input;
-
-import java.awt.*;
-import java.util.ArrayList;
-
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Created by trexr on 20/01/2017.
@@ -45,6 +46,8 @@ public class MainInterfaces {
     private ArrayList<GUI> guisPartieTerminer;
     private GUILabel labelPartieTerminer;
     private GUILabel recommencerPartie;
+    private GUILabel quitter;
+    private GUILabel[] highScoresLabel;
 
 
     public MainInterfaces(MainGame game){
@@ -125,7 +128,8 @@ public class MainInterfaces {
         //Menu Partie Terminer
         labelPartieTerminer = new GUILabel("PARTIE TERMINER",Main.WIDTH/2,10,Color.WHITE,"Arial",32);
         labelPartieTerminer.setX(Main.WIDTH/2 - labelPartieTerminer.getWitdh()/2);
-        recommencerPartie = new GUILabel("RECOMMENCER",Main.WIDTH/2,100,Color.WHITE,"Arial",16);
+        
+        recommencerPartie = new GUILabel("RECOMMENCER (A)",Main.WIDTH/2,100,Color.WHITE,"Arial",16);
         recommencerPartie.setX(Main.WIDTH/2 - recommencerPartie.getWitdh()/2);
         recommencerPartie.setAction(new ActionGUI(){
         	@Override
@@ -140,15 +144,87 @@ public class MainInterfaces {
         	public void clicked(float mouseX,float mouseY,int buttonKey,int buttonState){
         		game.reset();
         	}
+        	@Override
+			public void joystickButtonState(int idJoy,int id,int state){
+				if(idJoy == GLFW.GLFW_JOYSTICK_1){
+					if(state == 1 && id == 0){
+						game.reset();
+					}
+				}
+			}
         });
+        
+        quitter = new GUILabel("QUITTER (B)", Main.WIDTH/2, 120, Color.WHITE, "Arial", 16);
+        quitter.setX(Main.WIDTH/2 - quitter.getWitdh()/2);
+        quitter.setAction(new ActionGUI(){
+        	@Override
+        	public void enter(float mouseX,float mouseY){
+        		quitter.setColor(new Color(1, 1, 1, 0.5f));
+        	}
+        	@Override
+            public void leave(float mouseX,float mouseY){
+        		quitter.setColor(Color.WHITE);
+        	}
+        	@Override
+        	public void clicked(float mouseX,float mouseY,int buttonKey,int buttonState){
+        		Main.isDestroy = true;
+        	}
+        	@Override
+			public void joystickButtonState(int idJoy,int id,int state){
+				if(idJoy == GLFW.GLFW_JOYSTICK_1){
+					if(state == 1 && id == 1){
+						Main.isDestroy = true;
+					}
+				}
+			}
+        });
+        
+        highScoresLabel = new GUILabel[10];
+        for(int i = 0;i<10;i++){
+        	highScoresLabel[i] = new GUILabel(this.game.highScore.getTopScores()[i] + "",Main.WIDTH/2,150 + 20 * i,Color.WHITE,"Arial",16);
+        	highScoresLabel[i].setX(Main.WIDTH/2 - highScoresLabel[i].getWitdh()/2);
+        	guisPartieTerminer.add(highScoresLabel[i]);
+        }
         guisPartieTerminer.add(labelPartieTerminer);
         guisPartieTerminer.add(recommencerPartie);
+        guisPartieTerminer.add(quitter);
     }
 
     public void update(){
-        if(Input.isKey(this.game.helpKey)){
+    	boolean joysticksHelp = false;
+    	if(Input.getJoysticks().size() > 0){
+    		try{
+    			ByteBuffer b = Input.getJoysticksButton(0);
+        		if(b.get(3) == 1)joysticksHelp = true;
+    		}catch(Exception e){}
+    	}
+        if(Input.isKey(this.game.HELP_KEY) || joysticksHelp){
         	for(GUI g : guisHelp)g.update();
         }else if(this.game.scores[0] <= 0 || this.game.scores[1] <= 0 || MainGame.time_in_sec <= 0){
+        	int score = 0;
+        	if(!this.game.isEnd){
+        		if(this.game.scores[1]<this.game.scores[0]){
+            		this.game.highScore.put((int)this.game.scores[0]);
+            		score = (int)this.game.scores[0];
+            	}else{
+            		this.game.highScore.put((int)this.game.scores[1]);
+            		score = (int)this.game.scores[1];
+            	}
+            	this.game.saveHighScore();
+            	game.audioBackground.pauseSound();
+            	if(game.audioEffect != null){
+            		game.audioEffect.pauseSound();
+            	}
+        	}
+        	for(int i = 0;i<10;i++){
+            	highScoresLabel[i].setText(this.game.highScore.getTopScores()[i] + "");
+            	highScoresLabel[i].setX(Main.WIDTH/2 - highScoresLabel[i].getWitdh()/2);
+            	if(this.game.highScore.getTopScores()[i] == score){
+            		highScoresLabel[i].setColor(Color.RED);
+            	}else{
+            		highScoresLabel[i].setColor(Color.WHITE);
+            	}
+            }
         	for(GUI g : guisPartieTerminer)g.update();
         }else{
         	p1.setText("Player 1 : " + (int)this.game.scores[0]);
@@ -166,7 +242,14 @@ public class MainInterfaces {
     }
 
     public void render(){
-    	if(Input.isKey(this.game.helpKey)){
+    	boolean joysticksHelp = false;
+    	if(Input.getJoysticks().size() > 0){
+    		try{
+    			ByteBuffer b = Input.getJoysticksButton(0);
+        		if(b.get(3) == 1)joysticksHelp = true;
+    		}catch(Exception e){}
+    	}
+    	if(Input.isKey(this.game.HELP_KEY) || joysticksHelp){
     		for(GUI g : guisHelp)g.render();
         }else if(this.game.scores[0] <= 0 || this.game.scores[1] <= 0){
         	if(this.game.scores[0] <= 0){

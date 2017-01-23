@@ -1,5 +1,8 @@
 package globalgamejam.gui;
 
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+
 import globalgamejam.input.Input;
 
 /**
@@ -49,6 +52,18 @@ public abstract class GUI {
                 mouseInGUI = 0;
                 action.leave(mouseX,mouseY);
             }
+        }
+        for(int id : Input.getJoysticks()){
+        	try{
+        		FloatBuffer axis = Input.getJoysticksAxis(id);
+            	for(int i = 0;i < axis.capacity();i++){
+            		action.joystickAxisState(id, i, axis.get(i));
+            	}
+            	ByteBuffer buttons = Input.getJoysticksButton(id);
+            	for(int i = 0;i < buttons.capacity();i++){
+            		action.joystickButtonState(id, i, buttons.get(i));
+            	}
+        	}catch(Exception e){}
         }
     }
 

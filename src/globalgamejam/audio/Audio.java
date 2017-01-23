@@ -50,8 +50,9 @@ public class Audio {
     }
 
     public static void destroy(){
-        alcCloseDevice(device);
         alcDestroyContext(context);
+        alcCloseDevice(device);
+        ALC.destroy();
     }
     //------------------------------------------------------
 

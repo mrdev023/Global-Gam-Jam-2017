@@ -2,9 +2,10 @@ package globalgamejam.game;
 
 public enum EObjetType {
 
-	POISSON("res/textures/dechets1.png",-2, 0.75f),POMME("res/textures/dechets.png",-3, 0.75f),
+	POISSON("res/textures/dechets1.png",-2, 0.5f),POMME("res/textures/dechets.png",-3, 0.75f),
 	ETOILE_DE_MER("res/textures/bonus1.png",2, 0.75f),COQUILLAGE("res/textures/bonus2.png",3, 0.75f),
-	COQUILLAGE2("res/textures/bonus3.png",4, 0.75f),BANANE("res/textures/banane.png",-5, 0.75f);
+	COQUILLAGE2("res/textures/bonus3.png",4, 0.85f),BANANE("res/textures/banane.png",-5, 0.9f),
+	BALLON("res/textures/ballon.png", 1, 0.5f);
 	
 	private int points;
 	private String filename;
