@@ -66,7 +66,7 @@ public class PhysicalEntity {
 	
 	public boolean collideWithSquareHitBox(PhysicalEntity entity){
 		
-		// on teste une collision avec une hitbox carré
+		// on teste une collision avec une hitbox carrÃ©
 		return (this.x + this.sizeX / 2 >= entity.x - entity.sizeX / 2
 			&& this.x - this.sizeX / 2 <= entity.x + entity.sizeX / 2
 			&& this.y + this.sizeY / 2 >= entity.y - entity.sizeY / 2
@@ -90,22 +90,22 @@ public class PhysicalEntity {
 		
 		if(entity instanceof Mur){
 			
-			// on a touché le bas du Mur
+			// on a touchÃ© le bas du Mur
 			if(this.y <= entity.y - entity.sizeY / 2 && this.yVelocity > 0){
 				this.yVelocity *= -1;
 			}
 			
-			// on a touché le haut du Mur
+			// on a touchÃ© le haut du Mur
 			if(this.y >= entity.y + entity.sizeY / 2 && this.yVelocity < 0){
 				this.yVelocity *= -1;
 			}
 			
-			// on a touché le coté gauche du Mur
+			// on a touchÃ© le cotÃ© gauche du Mur
 			if(this.x <= entity.x - entity.sizeX / 2  && this.xVelocity > 0){
 				this.xVelocity *= -1;
 			}
 			
-			// on a touché le coté droit du Mur
+			// on a touchÃ© le cotÃ© droit du Mur
 			if(this.x >= entity.x + entity.sizeX / 2  && this.xVelocity < 0){
 				this.xVelocity *= -1;
 			}
@@ -120,7 +120,7 @@ public class PhysicalEntity {
 	}
 	
 	/**
-	 * Déplace l'entity et actualise ça vélocité
+	 * DÃ©place l'entity et actualise Ã§a vÃ©locitÃ©
 	 */
 	public void move(){
 		this.x += this.xVelocity;

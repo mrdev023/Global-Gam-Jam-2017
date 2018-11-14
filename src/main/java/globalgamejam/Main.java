@@ -60,7 +60,7 @@ public class Main {
 	public static boolean isDestroy = false;
 
     public static void main(String[] args) throws Exception {
-    	System.setProperty("org.lwjgl.librarypath", new File("libs").getAbsolutePath());
+    	// System.setProperty("org.lwjgl.librarypath", new File("libs").getAbsolutePath());
         //Creation de la fenetre
         //------------------------------------------------------------------------------------
         errorCallback = new GLFWErrorCallback() {

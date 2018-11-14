@@ -94,8 +94,8 @@ public class MainWorld {
 		vagues.getTransform().translate(Main.WIDTH/2, -Main.HEIGHT/2, 0);
 		vagues.getTransform().scale(Main.WIDTH,Main.HEIGHT, 0);
 
-		this.murGauche = new Mur(0,Main.HEIGHT/2+40,"res/textures/murcoté.png");
-		this.murDroit = new Mur(Main.WIDTH,Main.HEIGHT/2+40,"res/textures/murcoté.png");
+		this.murGauche = new Mur(0,Main.HEIGHT/2+40,"res/textures/murcotÃ©.png");
+		this.murDroit = new Mur(Main.WIDTH,Main.HEIGHT/2+40,"res/textures/murcotÃ©.png");
 		this.murHaut = new Mur(Main.WIDTH/2,Main.HEIGHT+10,"res/textures/murhauteur.png");
 		this.murBas = new Mur(Main.WIDTH/2,80,"res/textures/murbas.png");
 		this.mur1 = new Mur(Main.WIDTH/2,Main.HEIGHT-20,"res/textures/murmilieuhaut.png");

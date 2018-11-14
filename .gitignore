@@ -19,3 +19,5 @@ bin/*
 
 *.eml
 *.userlibraries
+/target/
+/Global-Gam-Jam-2017/
