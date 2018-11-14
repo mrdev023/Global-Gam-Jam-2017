@@ -21,3 +21,5 @@ bin/*
 *.userlibraries
 /target/
 /Global-Gam-Jam-2017/
+out/
+.settings/
