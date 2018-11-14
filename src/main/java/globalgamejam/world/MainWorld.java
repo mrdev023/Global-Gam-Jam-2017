@@ -153,7 +153,9 @@ public class MainWorld {
     			actualEffect = null;
     			effectTileJ1.clear();
     			effectTileJ2.clear();
-    			game.audioEffect.pauseSound();
+                         if (game.audioEffect instanceof Audio) {
+                            game.audioEffect.pauseSound();
+                         }
     			game.audioBackground.setGain(0.4f);
     		}
     	}
@@ -564,7 +566,7 @@ public class MainWorld {
     							game.audioBackground.setGain(0.1f);
     							game.audioEffect = game.audioMacarena;
     							game.audioEffect.playSound();
-    						} catch(Exception e){}
+    						} catch(Exception e){e.printStackTrace();}
         				}
         				else if(effectRand < 0.6){
         					// effet 3 avec 20% de chance

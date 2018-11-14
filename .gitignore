@@ -24,3 +24,4 @@ bin/*
 out/
 .settings/
 .DS_Store
+highscore
