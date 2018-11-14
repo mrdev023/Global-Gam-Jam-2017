@@ -23,3 +23,4 @@ bin/*
 /Global-Gam-Jam-2017/
 out/
 .settings/
+.DS_Store

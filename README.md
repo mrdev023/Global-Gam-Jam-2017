@@ -10,6 +10,13 @@ $ mvn package assembly:single
 
 ## RUN
 
+
+```
+$ java -jar target/GGL2017.jar
+```
+
+If not work try
+
 ```
 $ java -XstartOnFirstThread -jar target/GGL2017.jar
 ```
