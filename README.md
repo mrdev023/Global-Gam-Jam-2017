@@ -1,14 +1,14 @@
 # GGL 2017
 
-Ce projet a été créé durant la Global Game Jam de 2016 à Limoges.
+This project was maked when The Global Game Jam 2017 in Limoges.
 
-## Comment compiler
+## How to COMPILE
 
 ```
 $ mvn package assembly:single
 ```
 
-## RUN
+## How to RUN
 
 
 ```
