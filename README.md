@@ -20,3 +20,5 @@ If not work try
 ```
 $ java -XstartOnFirstThread -jar target/GGL2017.jar
 ```
+
+[Global Game Jam #2](https://globalgamejam.org/2017/games/beach-fighter)
